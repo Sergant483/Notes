@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/notesFragment">
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.yartsev.notes.presentation.fragments.notes.NotesFragment"
+        android:label="notes_fragment"
+        tools:layout="@layout/notes_fragment" >
+        <action
+            android:id="@+id/action_notesFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment"
+            app:enterAnim="@anim/enter_from_left_to_right"
+            app:exitAnim="@anim/exit_from_left_to_right"
+            app:popEnterAnim="@anim/enter_from_right_to_left"
+            app:popExitAnim="@anim/exit_from_right_to_left"
+            app:popUpTo="@id/notesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.yartsev.notes.presentation.fragments.tasks.TasksFragment"
+        android:label="tasks_fragment"
+        tools:layout="@layout/tasks_fragment" />
+    <fragment
+        android:id="@+id/addNoteFragment"
+        android:name="com.yartsev.notes.presentation.fragments.notes.adding.AddNoteFragment"
+        android:label="add_note_fragment"
+        tools:layout="@layout/add_note_fragment" />
+</navigation>
