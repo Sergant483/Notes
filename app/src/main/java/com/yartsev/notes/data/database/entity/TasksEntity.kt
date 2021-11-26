@@ -2,11 +2,10 @@ package com.yartsev.notes.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.yartsev.notes.data.repository.NotesRepository
 
 @Entity
-data class NotesEntity(
+data class TasksEntity(
     @PrimaryKey(autoGenerate = true)
-    val Id: Int = 0,
-    val text: String = "",
-    val imageUri: String = ""
+    val Id:Int
 )
