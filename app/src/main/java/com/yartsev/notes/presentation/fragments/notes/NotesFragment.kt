@@ -2,7 +2,6 @@ package com.yartsev.notes.presentation.fragments.notes
 
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yartsev.notes.R
-import com.yartsev.notes.data.database.entity.NotesEntity
 import com.yartsev.notes.databinding.NotesFragmentBinding
 import com.yartsev.notes.presentation.fragments.notes.adapter.NotesAdapter
+import com.yartsev.notes.presentation.fragments.notes.adding.AddNoteFragment
 import com.yartsev.notes.presentation.fragments.notes.util.SwipeController
 import dagger.hilt.android.AndroidEntryPoint
 import io.mobilation.bike.tracker.mobile.presentation.fragment.history.util.SwipeControllerActions
@@ -47,11 +46,12 @@ class NotesFragment : Fragment() {
         adapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.notesRecyclerView.adapter = adapter
-        viewModel.getAllNotes().observeOn(AndroidSchedulers.mainThread())
-            .subscribe { notes ->
-                adapter.setNotesList(notes)
-                initSwipeListener(notes)
-            }
+        viewModel.getAllNotes()
+        viewModel.notes.observe(viewLifecycleOwner, {
+            adapter.setNotesList(it)
+            initSwipeListener()
+        })
+
 //        viewModel.notes.observe(viewLifecycleOwner, {
 //            adapter.setNotesList(it)
 //            Log.e("TAGG", "OBSERVE")
@@ -71,14 +71,20 @@ class NotesFragment : Fragment() {
         }
     }
 
-    private fun onItemClick(itemIndex: Int) {}
+    private fun onItemClick(itemIndex: Int) {
+        val id = viewModel.notes.value?.get(itemIndex)?.Id
+        val bundle = Bundle()
+        id?.let { bundle.putInt(AddNoteFragment.BUNDLE_KEY, it) }
+        findNavController().navigate(R.id.action_notesFragment_to_addNoteFragment, bundle)
+    }
 
-    private fun initSwipeListener(notes: List<NotesEntity>) {
+    private fun initSwipeListener() {
         val swipeController = SwipeController(object : SwipeControllerActions() {
             override fun onRightClicked(position: Int) {
-                viewModel.deleteNote(notes[position].Id).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
+                viewModel.notes.value?.get(position)?.let {
+                    viewModel.deleteNote(it.Id).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {}
                     viewModel.notes.value?.toMutableList()?.removeAt(position)
                     _binding?.notesRecyclerView?.adapter?.notifyItemRemoved(position)
                     super.onRightClicked(position)

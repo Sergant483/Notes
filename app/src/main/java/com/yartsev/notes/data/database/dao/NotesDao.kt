@@ -7,6 +7,8 @@ import androidx.room.Query
 import com.yartsev.notes.data.database.entity.NotesEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface NotesDao {
@@ -14,8 +16,11 @@ interface NotesDao {
     @Query("SELECT * FROM NotesEntity")
     fun getAll(): Flowable<List<NotesEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(note: NotesEntity):Completable
+    @Query("SELECT * FROM NotesEntity WHERE id = :id")
+    fun getNoteById(id: Int): Single<NotesEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(note: NotesEntity): Completable
 
     @Query("DELETE  FROM NotesEntity WHERE id = :id")
     fun deleteById(id: Int):Completable
