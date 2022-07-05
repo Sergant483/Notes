@@ -1,5 +1,6 @@
 package com.yartsev.notes.presentation.fragments.notes.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent

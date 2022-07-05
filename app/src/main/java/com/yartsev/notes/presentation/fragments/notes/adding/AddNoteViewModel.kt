@@ -11,4 +11,7 @@ class AddNoteViewModel @Inject constructor(val notesRepository: NotesRepositoryI
 
     fun saveNote(note: NotesEntity) = notesRepository.insert(note)
 
+    fun getNoteById(id: Int) = notesRepository.loadNoteById(id)
+
+    fun deleteNoteById(id: Int) = notesRepository.deleteById(id)
 }

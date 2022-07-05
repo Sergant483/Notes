@@ -16,7 +16,7 @@ import dagger.hilt.components.SingletonComponent
 interface DataModule {
 
     @Binds
-    fun provideNotesRepositoryImpl(impl: NotesRepositoryImpl): NotesRepository
+    fun bindNotesRepositoryImpl(impl: NotesRepositoryImpl): NotesRepository
 
     companion object {
 

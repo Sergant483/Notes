@@ -10,7 +10,7 @@ import com.yartsev.notes.databinding.NotesItemBinding
 
 typealias OnItemClickListener = (position: Int) -> Unit
 
-class NotesAdapter(onItemClickListener: OnItemClickListener) :
+class NotesAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
     private var notesItems = mutableListOf<NotesEntity>()
 
@@ -37,7 +37,7 @@ class NotesAdapter(onItemClickListener: OnItemClickListener) :
             binding.text.text = noteItem.text
             Glide.with(binding.image.context).load(noteItem.imageUri.toUri()).centerCrop()
                 .into(binding.image)
+            binding.noteCardView.setOnClickListener { onItemClickListener(bindingAdapterPosition) }
         }
     }
-
 }
